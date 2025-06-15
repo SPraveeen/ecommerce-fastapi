@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from database import Base, engine
 from model import Users  # Import your models here
+from config import settings
 
 from alembic import context
 
@@ -60,7 +61,9 @@ def run_migrations_online() -> None:
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        {
+            "sqlalchemy.url": f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
+        },
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
